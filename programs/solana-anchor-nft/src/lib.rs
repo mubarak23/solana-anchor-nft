@@ -12,4 +12,16 @@ pub mod solana_anchor_nft {
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct InitNFT<`info> {
+    /// CHECK: <comment explaining why are we blindly trusting this account>
+    #[account(mut signer)]
+    signer: AccountInfo<`info>,
+    #[account(
+        init,
+        payer: signer,
+        mint::decimals = 0,
+        mint::authority = signer.key(),
+        mint::freeze_authority = signer.key()
+    )]
+    mint: Account<`info, Mint>,
+}
